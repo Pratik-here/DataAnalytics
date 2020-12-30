@@ -8,7 +8,9 @@ All Data Analytic Projects In R
 
   <li><b>Project-3</b>-Better Logistic Models using Interaction Terms. <b>File</b>: Gerber.R</li> 
   
-   <li><b>Project-4</b>-Multi-Class Classification <b>File</b>: LetterPrediction.R</li> 
+   <li><b>Project-4</b>-Multi-Class Classification: Letter Identification <b>File</b>: LetterPrediction.R</li> 
+     
+   <li><b>Project-5</b>-Census Data <b>File</b>: CensusPred.R</li> 
 </ul>
 
 <i> Projects 2,3,4 are course assignments for Analytics Edge. Data Courtesy : Edx </i>
