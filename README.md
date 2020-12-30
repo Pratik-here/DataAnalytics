@@ -13,7 +13,7 @@ All Data Analytic Projects In R
    <li><b>Project-5</b>-Census Data <b>File</b>: CensusPred.R</li> 
 </ul>
 
-<i> Projects 2,3,4 are course assignments for Analytics Edge. Data Courtesy : Edx </i>
+<i> Some Projects are course assignments for Analytics Edge. <b>Data Courtesy</b> : Edx </i>
 ## Citations:
 D. Kahle and H. Wickham. ggmap: Spatial Visualization with ggplot2. The R Journal, 5(1), 144-161. URL http://journal.r-project.org/archive/2013-1/kahle-wickham.pdf
 
