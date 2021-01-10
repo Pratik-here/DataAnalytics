@@ -11,6 +11,8 @@ All Data Analytic Projects In R
    <li><b>Project-4</b>-Multi-Class Classification: Letter Identification <b>File</b>: LetterPrediction.R</li> 
      
    <li><b>Project-5</b>-Census Data <b>File</b>: CensusPred.R</li> 
+   
+   <li><b>Project-6</b>-Time-Series Predictions <b>File</b>: TimeSeriesPred.R</li> 
 </ul>
 
 <i> Some Projects are course assignments for Analytics Edge. <b>Data Courtesy</b> : Edx </i>
