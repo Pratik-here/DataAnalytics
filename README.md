@@ -14,7 +14,7 @@ All Data Analytic Projects In R
    
    <li><b>Project-6</b>-Time-Series Predictions <b>File</b>: TimeSeriesPred.R</li> 
    
-   <li><b>Project-7</b>-Sports Scheduling <b>File</b>: TimeSeriesPred.R</li>
+   <li><b>Project-7</b>-Sports Scheduling <b>File</b>: SchedulingINExcel.xlsx</li>
 </ul>
 
 <i> Some Projects are course assignments for Analytics Edge. <b>Data Courtesy</b> : Edx </i>
