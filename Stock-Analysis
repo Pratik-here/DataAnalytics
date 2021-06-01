@@ -1,0 +1,91 @@
+library("pacman")
+pacman::p_load(quantmod, lubridate, TTR,PerformanceAnalytics, ggplot2)
+
+toDate = today()-1
+fromDate = toDate - months(6)
+
+#stock = c("DATAMATICS.NS")
+
+stock <- read.csv("C:\\Users\\Pratik Mishra\\Downloads\\nifty50.csv")
+stock <- stock$TICKER
+
+output =  data.frame(Ticker = character(),
+                     StandardDeviation = double(),
+                     Skew = double(),
+                     Kurtosis = double(), 
+                     ReturnDaily = double(),
+                     Value_At_Risk = double(),
+                     Sharpe_Ratio = double(),
+                     Support = double(),
+                     Resistance = double(),
+                     MeanValue = double()
+)
+
+for (i in 1: length(stock)) {
+  Data <- getSymbols(stock[i], 
+                     from = fromDate, 
+                     to = toDate, 
+                     src = "yahoo",
+                     auto.assign = FALSE
+  )
+  ticker <- stock[i]
+  
+  #Uniform Column names. Removed stock name from columns.
+  colnames(Data) = c("Open","High","Low","Close","Volume","Adjusted")
+  
+  #Calculating slope for the 44EMA.
+  Data1 <- na.omit(Data)
+  EMA(Data1$Close,n=44) -> ema.stock
+  ema.stock <- as.data.frame(ema.stock)
+  slope <- (ema.stock[nrow(ema.stock),] - ema.stock[nrow(ema.stock)-10,])/ema.stock[nrow(ema.stock)-10,]
+  
+  #macd & signal calculation
+  macd.stock <- MACD(Data1$Close)
+  macd.stock <- as.data.frame(macd.stock)
+  macd.up <- macd.stock$macd[nrow(macd.stock)]
+  signal <- macd.stock$signal[nrow(macd.stock)]
+  macd.slope <-(macd.stock$macd[nrow(macd.stock)] -macd.stock$macd[nrow(macd.stock)- 3])/macd.stock$macd[nrow(macd.stock)-3] 
+  signal.slope <- (macd.stock$signal[nrow(macd.stock)]-macd.stock$signal[nrow(macd.stock)-3])/macd.stock$signal[nrow(macd.stock)-3]
+  
+  #A more specific condition : 
+  #slope >= 0.05 & macd.up >= signal & macd.slope > signal.slope & abs(macd.up/signal - 1) <0.2
+  
+  dailyReturn(Data) ->DReturn
+  
+  
+  std_dev <- sd(DReturn)
+  skew <- skewness(DReturn,na.rm = TRUE)
+  kurto <- kurtosis(DReturn)
+  MeanDRet <- mean(DReturn)*100
+  ValueAtRisk <-VaR(DReturn, p= 0.95)*100
+  SharpeR <-SharpeRatio.annualized(DReturn,Rf=0)
+  
+  #cannot work with NA values
+  Data <- na.omit(Data)
+  dc <- lag(DonchianChannel(cbind(Hi(Data), Lo(Data))))
+  
+  HiLow<-dc[nrow(dc),]
+  HiLow<- as.data.frame(HiLow)
+  Support<-HiLow$low
+  
+  Resistance <- HiLow$high
+  MeanValue <- HiLow$mid
+  
+  
+  output = rbind(output,data.frame(ticker,std_dev,skew,kurto,MeanDRet,ValueAtRisk[,1],SharpeR[1],Support,Resistance,MeanValue))
+  
+  
+  
+}
+
+
+output[,2:10]<-round(output[,2:10],2)
+colnames(output) = c("Ticker","Std-Dev","Skew","Kurtosis","Daily Return","Value at Risk (95%)","Sharpe Ratio","Support","Resistance","MeanValue")
+
+rm(SharpeR,ValueAtRisk,HiLow,ema.stock,i,kurto,MeanDRet,MeanValue,Resistance,skew,slope,std_dev,
+   Support,ticker,dc,Data1,DReturn,Data,macd.slope,signal.slope,signal,macd.up,macd.stock)
+
+write.csv(output,"C:\\Users\\Pratik Mishra\\OneDrive\\Desktop\\MyOutput.csv", row.names = FALSE)
+#print(paste0("The std-dev is ",std_dev," and The Skew is ",skew,
+#            " and The kurtosis is ",kurto," and The Mean Daily Return is ",MeanDRet,
+#             " and the VaR is ", ValueAtRisk, " and the Sharpe Ratio is ",SharpeR))
